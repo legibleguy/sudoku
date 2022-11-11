@@ -3,7 +3,7 @@ from sudoku import solve_sudoku
 from graph_debug import draw_board, draw_board_domain_lenghts, draw_board_indeces
 
 testBoard = board()
-print(testBoard.can_be_placed(4, 3, 4))
+#print(testBoard.can_be_placed(4, 3, 4))
 testBoard.set_value_at(0, 0, 5)
 testBoard.set_value_at(0, 1, 6)
 testBoard.set_value_at(1, 0, 3)
@@ -16,6 +16,7 @@ testBoard.set_value_at(5, 1, 5)
 testBoard.set_value_at(2, 2, 8)
 testBoard.set_value_at(7, 2, 6)
 
+print(testBoard.get_surrounding_cells(1))
 
 testBoard.set_value_at(0, 3, 8)
 testBoard.set_value_at(0, 4, 4)

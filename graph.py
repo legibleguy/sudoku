@@ -21,7 +21,37 @@ class board:
         for zone in self.__zones:
             if idx in zone: return zone.copy()
         return []
+    
+    #different from __get_neighbors().
+    #will return points that are to the left, right, up, and down from the given point
+    #which is not always in the same zone
+    #also will not return all points that are in the same row and column
+    def get_surrounding_cells(self, atCell: int):
+        result = []
+        asCoord = idx_to_coord(atCell)
+        if asCoord[0] - 1 >= 0: #cell to the left
+            result.append(coord_to_idx(asCoord[0]-1, asCoord[1]))
+        if asCoord[0] + 1 < 9:
+            result.append(coord_to_idx(asCoord[0]+1, asCoord[1]))
+        if asCoord[1] - 1 >= 0:
+            result.append(coord_to_idx(asCoord[0], asCoord[1]-1))
+        if asCoord[1] + 1 < 9:
+            result.append(coord_to_idx(asCoord[0], asCoord[1]+1))
+        
+        #diagonal neighbors
+        if asCoord[0] - 1 >= 0 and asCoord[1] - 1 >= 0:
+            result.append(coord_to_idx(asCoord[0] - 1, asCoord[1] - 1))
+        if asCoord[0] + 1 < 9 and asCoord[1] - 1 >= 0:
+            result.append(coord_to_idx(asCoord[0] + 1, asCoord[1] - 1))
+        if asCoord[0] - 1 >= 0 and asCoord[1] + 1 < 9:
+            result.append(coord_to_idx(asCoord[0] - 1, asCoord[1] + 1))
+        if asCoord[0] + 1 < 9 and asCoord[1] + 1 < 9:
+            result.append(coord_to_idx(asCoord[0] + 1, asCoord[1] + 1))
+        
+        
+        return result
 
+    #returns cells that are in the same row, same column, and the same zone as the given cell
     def __get_neighbors(self, atX : int, atY : int):
         idx = coord_to_idx(atX, atY)
         outNeighbors = self.__get_zone_at_point(atX, atY)
