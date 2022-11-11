@@ -16,8 +16,6 @@ testBoard.set_value_at(5, 1, 5)
 testBoard.set_value_at(2, 2, 8)
 testBoard.set_value_at(7, 2, 6)
 
-print(testBoard.get_surrounding_cells(1))
-
 testBoard.set_value_at(0, 3, 8)
 testBoard.set_value_at(0, 4, 4)
 testBoard.set_value_at(0, 5, 7)
@@ -44,4 +42,5 @@ draw_board(testBoard)
 draw_board_domain_lenghts(testBoard)
 
 solve_sudoku(testBoard)
+draw_board(testBoard)
 # draw_board(testBoard)

@@ -1,5 +1,5 @@
 def coord_to_idx(coordX: int, coordY: int, boardSizeX = 9, boardSizeY = 9):
-    coord = (coordY * boardSizeX) + coordX
+    coord = (coordX * boardSizeX) + coordY
     if coord >= boardSizeX * boardSizeY: return -1
     else: return coord 
 
