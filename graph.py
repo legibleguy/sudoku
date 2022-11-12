@@ -78,9 +78,16 @@ class board:
         idx = coord_to_idx(atX, atY)
         
         for neighb in self.__get_neighbors(atX, atY):
-            if self.values[neighb] == value: return False
+            if self.values[neighb] == value: 
+                # print(str(value) + " cannot be placed in (" + str(atX) + ", " + str(atY) + ")")
+                return False
         
         return True
+    
+    def is_any_domain_zero(self) -> bool:
+        for domain in self.domains:
+            if len(domain) == 0: return True
+        return False
     
     def set_value_at(self, atX : int, atY : int, value : int) -> bool:
 

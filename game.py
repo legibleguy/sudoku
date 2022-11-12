@@ -1,5 +1,5 @@
-from graph import board
-from sudoku import solve_sudoku
+from graph import board, idx_to_coord
+from sudoku import *
 from graph_debug import draw_board, draw_board_domain_lenghts, draw_board_indeces
 
 testBoard = board()
@@ -39,7 +39,47 @@ testBoard.set_value_at(7, 8, 7)
 testBoard.set_value_at(8, 8, 9)
 
 draw_board(testBoard)
-draw_board_domain_lenghts(testBoard)
+# draw_board_domain_lenghts(testBoard)
+# draw_board_indeces(testBoard)
+
+##TO REMOVE
+
+# print("MRV result: " + str(get_MRV(testBoard)))
+# print("domain size at cell #40 is " + str(len(testBoard.domains[40])))
+# print("the domain at cell #40 is " + str(testBoard.domains[40]))
+# print("domain size at cell #51 is " + str(len(testBoard.domains[51])))
+# print("the domain at cell #51 is " + str(testBoard.domains[51]))
+# print("domain size at cell #70 is " + str(len(testBoard.domains[70])))
+# print("the domain at cell #70 is " + str(testBoard.domains[70]))
+# print("domain size at cell #78 is " + str(len(testBoard.domains[78])))
+# print("the domain at cell #78 is " + str(testBoard.domains[78]))
+
+# maxHeuristicFound: int = -1
+# maxHeurisitcIdx: int = -1
+
+# firstMRV = get_MRV(testBoard)
+
+# for cell in firstMRV:
+#         heuristic = get_degree_heuristic(cell, testBoard)
+#         if heuristic > maxHeuristicFound:
+#             maxHeuristicFound = heuristic
+#             maxHeurisitcIdx = cell
+
+# print("the index of the max heuristic" + str(maxHeurisitcIdx))
+# print("the value of the max heuristic" + str(maxHeuristicFound))
+
+# coords = idx_to_coord(get_MRV(testBoard)[0])
+# print("Setting the value in the cell that has only one possible cvalue left (" + str(coords) + ")")
+# testBoard.set_value_at(coords[0], coords[1], testBoard.domains[40][0])
+
+# for cell in firstMRV:
+#     coord = idx_to_coord(cell)
+#     testBoard.set_value_at(coord[0], coord[1], testBoard.domains[cell][0])
+
+# print("After setting values in 4 cells our MRV is " + str(get_MRV(testBoard)))
+# print("The lenght of the new MRV is " + str(len(testBoard.domains[get_MRV(testBoard)[0]])))
+
+##
 
 solve_sudoku(testBoard)
 draw_board(testBoard)

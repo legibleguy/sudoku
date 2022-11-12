@@ -1,6 +1,7 @@
 from graph import board, idx_to_coord
 from copy import deepcopy
 from random import choice
+from graph_debug import draw_board, draw_board_domain_lenghts
 #, get_surrounding_cells
 
 def backtracking(inBoard: board):
@@ -12,10 +13,19 @@ def fwd_checking(inBoard: board) -> bool:
     for domain in inBoard.domains:
         if len(domain) > 1:
             noOptions = False
-    
-    if noOptions: return False
+        if len(domain) == 0:
+            print("can't decide what to put in one of the cells")
+            return False
+    if noOptions: 
+        print("All cells have been set.")
+        for idx in range(len(inBoard.values)):
+            if inBoard.values[idx] == 0:
+                inBoard.values[idx] = inBoard.domains[idx][0]
+
+        return True
 
     minValues = get_MRV(inBoard)
+    print("MRV is " + str(minValues))
 
     maxHeuristicFound = -1
     maxHeurisitcIdx = -1
@@ -24,37 +34,58 @@ def fwd_checking(inBoard: board) -> bool:
         if heuristic > maxHeuristicFound:
             maxHeuristicFound = heuristic
             maxHeurisitcIdx = cell
-    
+    print("Our of those MRVs, we chose cell #" + str(maxHeurisitcIdx))
 
     idxAsCoord = idx_to_coord(maxHeurisitcIdx)
     boardToCheck = deepcopy(inBoard)
-    valuesToCheck = boardToCheck.domains[maxHeurisitcIdx]
+    valuesToCheck = boardToCheck.domains[maxHeurisitcIdx].copy()
     newValue = valuesToCheck.pop(0)
+    print("The first newValue value is " + str(newValue))
 
     while len(valuesToCheck) > 0:
+        print("Right now we are checking " + str(newValue) + " at (" + str(idxAsCoord[0]) + ", " + str(idxAsCoord[1]) + ")")
+        print(str(len(valuesToCheck)) + " values left to check")
         if (boardToCheck.can_be_placed(idxAsCoord[0], idxAsCoord[1], newValue)):
             boardToCheck.set_value_at(idxAsCoord[0], idxAsCoord[1], newValue)
-            if not fwd_checking(boardToCheck):
+            
+            if boardToCheck.is_any_domain_zero(): 
+                boardToCheck = deepcopy(inBoard)
                 newValue = valuesToCheck.pop(0)
             else:
-                inBoard.set_value_at(idxAsCoord[0], idxAsCoord[1], newValue)
-                return True
+                draw_board(boardToCheck)
+                draw_board_domain_lenghts(boardToCheck)
+                if fwd_checking(boardToCheck):
+                    # print("Setting a value")
+                    inBoard.set_value_at(idxAsCoord[0], idxAsCoord[1], newValue)
+                    return True
+                else:
+                    print("fwd_check has failed for value " + str(newValue) + " at " + str(idxAsCoord[0]) + ", " + str(idxAsCoord[1]))
+                    print("Before popping the len of valuesToCheck is " + str(len(valuesToCheck)))
+                    boardToCheck = deepcopy(inBoard)
+                    newValue = valuesToCheck.pop(0)
+                    print("After popping the len of valuesToCheck is " + str(len(valuesToCheck)))
         else:
+            print("can_be_placed has failed for value " + str(newValue) + " at " + str(idxAsCoord[0]) + ", " + str(idxAsCoord[1]))
             newValue = valuesToCheck.pop(0)
     
+    print("Ran out of options - returning false")
     return False
 
 #returns an array of indices
 def get_MRV(inBoard: board): 
-    minLen: int = 9
+    minLen: int = -1
     idx_list = []
     for domain in inBoard.domains:
-        if len(domain) < minLen:
-            minLen = len(domain)
-    for idx in range(0, len(inBoard.domains)):
+        if minLen == -1 or len(domain) < minLen:
+            if(len(domain) > 1): minLen = len(domain)
+
+    for idx in range(len(inBoard.domains)):
+        if(len(inBoard.domains[idx]) == 1): continue
+
         domain = inBoard.domains[idx]
         if len(domain)==minLen:
             idx_list.append(idx)
+            
     return idx_list
 
 
