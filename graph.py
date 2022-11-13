@@ -89,6 +89,13 @@ class board:
             if len(domain) == 0: return True
         return False
     
+    def get_empty_cells(self) -> list:
+        result = []
+        for i in range(81):
+            if self.values[i] == 0: result.append(i)
+        
+        return result
+    
     def set_value_at(self, atX : int, atY : int, value : int) -> bool:
 
         idx = coord_to_idx(atX, atY)

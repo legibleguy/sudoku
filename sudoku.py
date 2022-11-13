@@ -100,5 +100,41 @@ def get_degree_heuristic(position, inBoard: board) -> int:
             degree += 1
     return degree
 
+def new_fwd_check(inBoard: board, checkAt, value) -> bool:
+    boardToCheck = deepcopy(inBoard)
+    #if not boardToCheck.can_be_placed(checkAt[0], checkAt[1], value): return False
+    boardToCheck.set_value_at(checkAt[0], checkAt[1], value)
+
+    for domain in boardToCheck.domains:
+        if len(domain) == 0: return False
+    
+    return True
+
 def solve_sudoku(inBoard: board):
-    print(fwd_checking(inBoard))
+
+    if len(inBoard.get_empty_cells()) == 0: return True
+
+    minValues = get_MRV(inBoard)
+
+    maxHeuristicFound = -1
+    maxHeurisitcIdx = -1
+    for cell in minValues:
+        heuristic = get_degree_heuristic(cell, inBoard)
+        if heuristic > maxHeuristicFound:
+            maxHeuristicFound = heuristic
+            maxHeurisitcIdx = cell
+
+    idxAsCoord = idx_to_coord(maxHeurisitcIdx)
+    valuesToCheck = inBoard.domains[maxHeurisitcIdx].copy()
+
+    while len(valuesToCheck) > 0:
+        toCheck = valuesToCheck.pop(0)
+        boardBefore = deepcopy(inBoard)
+        if new_fwd_check(inBoard, idxAsCoord, toCheck):
+            inBoard.set_value_at(idxAsCoord[0], idxAsCoord[1], toCheck)
+            if solve_sudoku(inBoard): return True
+            else: inBoard = boardBefore
+    
+    return False
+
+
