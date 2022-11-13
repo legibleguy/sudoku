@@ -14,7 +14,7 @@ class board:
                     [27, 28, 29, 36, 37, 38, 45, 46, 47], [30, 31, 32, 39, 40, 41, 48, 49, 50], [33, 34, 35, 42, 43, 44, 51, 52, 53],
                     [54, 55, 56, 63, 64, 65, 72, 73, 74], [57, 58, 59, 66, 67, 68, 75, 76, 77], [60, 61, 62, 69, 70, 71, 78, 79, 80]]
         
-        for i in range(0, 81): self.domains.append([1,2,3,4,5,6,7,8,9])
+        for i in range(81): self.domains.append([1,2,3,4,5,6,7,8,9])
 
     def __get_zone_at_point(self, atX: int, atY : int):
         idx = coord_to_idx(atX, atY)
@@ -91,8 +91,8 @@ class board:
     
     def get_empty_cells(self) -> list:
         result = []
-        for i in range(81):
-            if self.values[i] == 0: result.append(i)
+        for idx in range(len(self.values)): 
+            if self.values[idx] == 0: result.append(idx)
         
         return result
     

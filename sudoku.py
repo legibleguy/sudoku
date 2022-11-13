@@ -75,16 +75,26 @@ def fwd_checking(inBoard: board) -> bool:
 def get_MRV(inBoard: board): 
     minLen: int = -1
     idx_list = []
+    emptyCells = inBoard.get_empty_cells()
+    # for cell in emptyCells:
+    #     domain = inBoard.domains[cell]
+    #     if minLen == -1 or len(domain) < minLen:
+    #         if(len(domain) > 1): minLen = len(domain)
+
     for domain in inBoard.domains:
         if minLen == -1 or len(domain) < minLen:
-            if(len(domain) > 1): minLen = len(domain)
+            if(len(domain) >= 1): minLen = len(domain)
+    
+    for cell in emptyCells:
+        if len(inBoard.domains[cell]) == minLen:
+            idx_list.append(cell)
 
-    for idx in range(len(inBoard.domains)):
-        if(len(inBoard.domains[idx]) == 1): continue
+    # for idx in range(len(inBoard.domains)):
+    #     if(len(inBoard.domains[idx]) == 1): continue
 
-        domain = inBoard.domains[idx]
-        if len(domain)==minLen:
-            idx_list.append(idx)
+    #     domain = inBoard.domains[idx]
+    #     if len(domain)==minLen:
+    #         idx_list.append(idx)
             
     return idx_list
 
@@ -112,7 +122,8 @@ def new_fwd_check(inBoard: board, checkAt, value) -> bool:
 
 def solve_sudoku(inBoard: board):
 
-    if len(inBoard.get_empty_cells()) == 0: return True
+    if len(inBoard.get_empty_cells()) == 0: 
+        return True
 
     minValues = get_MRV(inBoard)
 
@@ -127,7 +138,7 @@ def solve_sudoku(inBoard: board):
     idxAsCoord = idx_to_coord(maxHeurisitcIdx)
     valuesToCheck = inBoard.domains[maxHeurisitcIdx].copy()
 
-    while len(valuesToCheck) > 0:
+    while len(valuesToCheck) != 0:
         toCheck = valuesToCheck.pop(0)
         boardBefore = deepcopy(inBoard)
         if new_fwd_check(inBoard, idxAsCoord, toCheck):
