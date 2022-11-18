@@ -8,6 +8,7 @@ def idx_to_coord(idx: int, boardSizeX = 9, boardSizeY = 9):
 
 class board:
     def __init__(self) -> None:
+        self.history = []
         self.values = [0] * 81
         self.domains = []
         self.__zones = [[0, 1, 2, 9, 10, 11, 18, 19, 20], [3, 4, 5, 12, 13, 14, 21, 22, 23], [6, 7, 8, 15, 16, 17, 24, 25, 26],
@@ -29,25 +30,31 @@ class board:
     def get_surrounding_cells(self, atCell: int):
         result = []
         asCoord = idx_to_coord(atCell)
+        
+        
+
+        
+        
+        
+        
+        if asCoord[0] - 1 >= 0 and asCoord[1] - 1 >= 0: #up left
+            result.append(coord_to_idx(asCoord[0] - 1, asCoord[1] - 1))
         if asCoord[0] - 1 >= 0: #cell to the left
             result.append(coord_to_idx(asCoord[0]-1, asCoord[1]))
-        if asCoord[0] + 1 < 9:
-            result.append(coord_to_idx(asCoord[0]+1, asCoord[1]))
-        if asCoord[1] - 1 >= 0:
-            result.append(coord_to_idx(asCoord[0], asCoord[1]-1))
-        if asCoord[1] + 1 < 9:
-            result.append(coord_to_idx(asCoord[0], asCoord[1]+1))
-        
-        #diagonal neighbors
-        if asCoord[0] - 1 >= 0 and asCoord[1] - 1 >= 0:
-            result.append(coord_to_idx(asCoord[0] - 1, asCoord[1] - 1))
-        if asCoord[0] + 1 < 9 and asCoord[1] - 1 >= 0:
-            result.append(coord_to_idx(asCoord[0] + 1, asCoord[1] - 1))
-        if asCoord[0] - 1 >= 0 and asCoord[1] + 1 < 9:
+        if asCoord[0] - 1 >= 0 and asCoord[1] + 1 < 9: #bottom left
             result.append(coord_to_idx(asCoord[0] - 1, asCoord[1] + 1))
-        if asCoord[0] + 1 < 9 and asCoord[1] + 1 < 9:
+
+        if asCoord[1] + 1 < 9: #up
+            result.append(coord_to_idx(asCoord[0], asCoord[1]+1))
+        if asCoord[1] - 1 >= 0: #down
+            result.append(coord_to_idx(asCoord[0], asCoord[1]-1))
+
+        if asCoord[0] + 1 < 9 and asCoord[1] - 1 >= 0: #up right
+            result.append(coord_to_idx(asCoord[0] + 1, asCoord[1] - 1))
+        if asCoord[0] + 1 < 9: #right
+            result.append(coord_to_idx(asCoord[0]+1, asCoord[1]))
+        if asCoord[0] + 1 < 9 and asCoord[1] + 1 < 9: #bottom right
             result.append(coord_to_idx(asCoord[0] + 1, asCoord[1] + 1))
-        
         
         return result
 
@@ -75,14 +82,22 @@ class board:
         return outNeighbors
     
     def can_be_placed(self, atX : int, atY : int, value : int) -> bool:
-        idx = coord_to_idx(atX, atY)
-        
-        for neighb in self.__get_neighbors(atX, atY):
-            if self.values[neighb] == value: 
-                # print(str(value) + " cannot be placed in (" + str(atX) + ", " + str(atY) + ")")
+        neighbors = self.__get_neighbors(atX, atY)
+        for neighb in neighbors:
+            if self.values[neighb] == value or (len(self.domains[neighb]) == 1 and self.domains[neighb][0] == value): 
                 return False
-        
+                
         return True
+    
+    def get_heuristic(self, pointIdx: int):
+        degree = 0
+        coord = idx_to_coord(pointIdx)
+        neighbors = self.__get_neighbors(coord[0], coord[1])
+        for point in neighbors:
+            if self.values[point] == 0:
+                degree += 1
+        
+        return degree
     
     def is_any_domain_zero(self) -> bool:
         for domain in self.domains:
@@ -105,3 +120,5 @@ class board:
         for neighb in self.__get_neighbors(atX, atY):
             if value in self.domains[neighb]: 
                 self.domains[neighb].remove(value)
+                if len(self.domains[neighb]) == 0:
+                    print("null domain error")
