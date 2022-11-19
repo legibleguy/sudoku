@@ -17,7 +17,7 @@ def draw_board(inBoard : board):
         toPrint += "\n"
     print(toPrint)
     
-def draw_board_domain_lenghts(inBoard : board):
+def draw_board_domain_lengths(inBoard : board):
     toPrint: str = ""
     count = 0
     for y in range(0, 11):
@@ -34,7 +34,7 @@ def draw_board_domain_lenghts(inBoard : board):
         toPrint += "\n"
     print(toPrint)
     
-def draw_board_indeces(inBoard : board):
+def draw_board_indices(inBoard : board):
     toPrint: str = ""
     count = 0
     for y in range(0, 11):

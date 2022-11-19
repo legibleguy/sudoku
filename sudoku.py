@@ -1,7 +1,7 @@
 from graph import board, idx_to_coord
 from copy import deepcopy
 from random import choice
-from graph_debug import draw_board, draw_board_domain_lenghts
+from graph_debug import draw_board, draw_board_domain_lengths
 
 #returns an array of indices
 def get_MRV(inBoard: board): 
@@ -26,8 +26,8 @@ def get_degree_heuristic(position, inBoard: board) -> int:
     degree = 0
     surrounding = inBoard.get_surrounding_cells(position)
     for point in surrounding:
-        lenght = len(inBoard.domains[point])
-        if inBoard.values[point] != 0 and lenght >= 1:
+        length = len(inBoard.domains[point])
+        if inBoard.values[point] != 0 and length >= 1:
             degree += 1
     if degree == 0:
         return degree #just for debugging purposes

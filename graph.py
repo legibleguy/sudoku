@@ -14,7 +14,6 @@ class board:
         self.__zones = [[0, 1, 2, 9, 10, 11, 18, 19, 20], [3, 4, 5, 12, 13, 14, 21, 22, 23], [6, 7, 8, 15, 16, 17, 24, 25, 26],
                     [27, 28, 29, 36, 37, 38, 45, 46, 47], [30, 31, 32, 39, 40, 41, 48, 49, 50], [33, 34, 35, 42, 43, 44, 51, 52, 53],
                     [54, 55, 56, 63, 64, 65, 72, 73, 74], [57, 58, 59, 66, 67, 68, 75, 76, 77], [60, 61, 62, 69, 70, 71, 78, 79, 80]]
-        
         for i in range(81): self.domains.append([1,2,3,4,5,6,7,8,9])
 
     def __get_zone_at_point(self, atX: int, atY : int):
@@ -30,13 +29,6 @@ class board:
     def get_surrounding_cells(self, atCell: int):
         result = []
         asCoord = idx_to_coord(atCell)
-        
-        
-
-        
-        
-        
-        
         if asCoord[0] - 1 >= 0 and asCoord[1] - 1 >= 0: #up left
             result.append(coord_to_idx(asCoord[0] - 1, asCoord[1] - 1))
         if asCoord[0] - 1 >= 0: #cell to the left
@@ -55,7 +47,6 @@ class board:
             result.append(coord_to_idx(asCoord[0]+1, asCoord[1]))
         if asCoord[0] + 1 < 9 and asCoord[1] + 1 < 9: #bottom right
             result.append(coord_to_idx(asCoord[0] + 1, asCoord[1] + 1))
-        
         return result
 
     #returns cells that are in the same row, same column, and the same zone as the given cell
@@ -78,7 +69,6 @@ class board:
         for y in range(atY+1, 9):
             neighb_idx = coord_to_idx(atX, y)
             if neighb_idx not in outNeighbors: outNeighbors.append(neighb_idx)
-        
         return outNeighbors
     
     def can_be_placed(self, atX : int, atY : int, value : int) -> bool:
@@ -86,7 +76,6 @@ class board:
         for neighb in neighbors:
             if self.values[neighb] == value or (len(self.domains[neighb]) == 1 and self.domains[neighb][0] == value): 
                 return False
-                
         return True
     
     def get_heuristic(self, pointIdx: int):
@@ -96,7 +85,6 @@ class board:
         for point in neighbors:
             if self.values[point] == 0:
                 degree += 1
-        
         return degree
     
     def is_any_domain_zero(self) -> bool:
